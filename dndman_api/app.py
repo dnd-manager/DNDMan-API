@@ -19,7 +19,6 @@ app.add_middleware(
 @app.post("/users", response_model=schemas.User)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     """Creates a new user and adds it to the database."""
-    print(user.__dict__)
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="User with email already registered")
