@@ -41,7 +41,9 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
     return db_user
 
 
-
+@app.post("/user_sessions/signin/", response_model=str)
+def signin_user(user_signin: schemas.UserSignin, db: Session = Depends(get_db)):
+    return crud.create_user_session(db)
 
 @app.post("/user_sessions/create/{user_id}", response_model=str)
 def create_user_session(user_id: int, db: Session = Depends(get_db)):
