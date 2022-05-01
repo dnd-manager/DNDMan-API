@@ -10,8 +10,8 @@ database.Base.metadata.create_all(bind=database.engine)
 app = FastAPI(title="DNDMan API")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
     allow_credentials=True,
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -39,3 +39,18 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
+
+
+@app.post("/user_sessions/signin/", response_model=str)
+def signin_user(user_signin: schemas.UserSignin, db: Session = Depends(get_db)):
+    return crud.create_user_session(db)
+
+@app.post("/user_sessions/create/{user_id}", response_model=str)
+def create_user_session(user_id: int, db: Session = Depends(get_db)):
+    """Creates or gets a session for user"""
+    return crud.create_user_session(db, user_id)
+
+@app.post("/user_sessions/delete/{session_id}", response_model=None)
+def delete_user_session(session_id: str, db: Session = Depends(get_db)):
+    """Deletes a user session with given id"""
+    return crud.delete_user_session(db, session_id)

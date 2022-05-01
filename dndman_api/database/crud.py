@@ -1,9 +1,11 @@
+import uuid
 from sqlalchemy.orm import Session
 
 from dndman_api import database
 from dndman_api import schemas
 
 from argon2 import PasswordHasher
+
 ph = PasswordHasher()
 
 def get_user(db: Session, user_id: int):
@@ -57,3 +59,52 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+
+
+def create_user_session(db: Session, user_id: int):
+    """
+    Creates and adds a new session to the database
+    If user already has session, returns that session
+
+    :param db: SQLAlchemy Session object
+    :param user_id: User that the session is created for
+    :return: The created session ID
+    """
+
+    us = get_user_session_by_user(user_id);
+    if us is not None:
+        return us.id
+
+    session_id = str(uuid.uuid4())
+
+    db_user_session = database.UserSession(
+        user_id=user_id,
+        id=session_id
+    )
+    db.add(db_user_session)
+    db.commit()
+    db.refresh(db_user_session)
+    return session_id
+
+def get_user_session_by_user(db: Session, user_id: int):
+    """
+    Get the user session a user is in right now. Nullable
+    
+    :param db: SQLAlchemy Session object
+    :param user_id: User that the session is created for
+    :return: The user session
+    """
+
+    return db.query(database.UserSession).filter(database.UserSession.user_id == user_id).first()
+
+def delete_user_session(db: Session, session_id: str):
+    """
+    Delete the user session with the given session id
+
+    :param db: SQLAlchemy Session object
+    :param user_id: The session with id that you want to delete
+    """
+    
+    db.query(database.UserSession).filter(database.UserSession.id == session_id).delete(synchronize_session="evaluate")
+    db.commit()
