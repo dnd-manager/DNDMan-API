@@ -22,4 +22,4 @@ class UserSigninRequest(BaseModel):
 
 class UserSignedIn(BaseModel):
     session: str
-    user: str
+    user: int
