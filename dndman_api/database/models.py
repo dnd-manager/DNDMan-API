@@ -16,4 +16,4 @@ class UserSession(Base):
     __tablename__ = "user_sessions"
 
     id = Column(String, primary_key=True, unique=True)
-    user_id = Column(Integer, unique=True)
+    user_id = Column(Integer)

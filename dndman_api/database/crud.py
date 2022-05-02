@@ -6,7 +6,7 @@ from dndman_api import schemas
 
 from argon2 import PasswordHasher
 
-ph = PasswordHasher()
+password_hasher = PasswordHasher()
 
 def get_user(db: Session, user_id: int):
     """
@@ -51,7 +51,7 @@ def create_user(db: Session, user: schemas.UserCreate):
     :return: A user object with the users information
     """
     # pseudo_hashed_password = user.password + "notreallyhashed"
-    hashed_password = ph.hash(user.password)
+    hashed_password = password_hasher.hash(user.password)
     db_user = database.User(
         email=user.email, username=user.username, hashed_password=hashed_password,
     )

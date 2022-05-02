@@ -16,6 +16,10 @@ class User(UserBase):
     class Config:
         orm_mode = True
 
-class UserSignin(BaseModel):
+class UserSigninRequest(BaseModel):
     email: str
     password: str
+
+class UserSignedIn(BaseModel):
+    session: str
+    user: str
