@@ -65,16 +65,11 @@ def create_user(db: Session, user: schemas.UserCreate):
 def create_user_session(db: Session, user_id: int):
     """
     Creates and adds a new session to the database
-    If user already has session, returns that session
 
     :param db: SQLAlchemy Session object
     :param user_id: User that the session is created for
     :return: The created session ID
     """
-
-    us = get_user_session_by_user(user_id);
-    if us is not None:
-        return us.id
 
     session_id = str(uuid.uuid4())
 

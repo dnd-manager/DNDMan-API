@@ -41,9 +41,10 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
     return db_user
 
 
-@app.post("/user_sessions/signin/", response_model=str)
-def signin_user(user_signin: schemas.UserSignin, db: Session = Depends(get_db)):
-    return crud.create_user_session(db)
+@app.get("/user_sessions/user_has_session/{user_id}", response_model=bool)
+def does_user_have_session(user_id: int, db: Session = Depends(get_db)):
+    """Creates or gets a session for user"""
+    return crud.get_user_session_by_user(db, user_id) is not None
 
 @app.post("/user_sessions/create/{user_id}", response_model=str)
 def create_user_session(user_id: int, db: Session = Depends(get_db)):
