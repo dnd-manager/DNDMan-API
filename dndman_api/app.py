@@ -18,6 +18,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.get("/alive", response_model=None)
+def alive():
+    """Just to check if server is alive. Returns 200 with null response body"""
+    pass
+
 @app.post("/users", response_model=schemas.User)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     """Creates a new user and adds it to the database."""
