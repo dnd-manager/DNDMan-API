@@ -23,3 +23,6 @@ class UserSigninRequest(BaseModel):
 class UserSignedIn(BaseModel):
     session: str
     user: int
+
+class CharacterCreationRequestion(BaseModel):
+    pass

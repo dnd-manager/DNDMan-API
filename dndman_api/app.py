@@ -18,7 +18,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.get("/alive", response_model=None)
 def alive():
     """Just to check if server is alive. Returns 200 with null response body"""
